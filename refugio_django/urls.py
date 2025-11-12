@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from django.conf.urls.static import static # Necesario para servir MEDIA (imágenes)
+from django.conf.urls.static import static 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,10 +13,8 @@ urlpatterns = [
     path('adopciones/', include('adopciones.urls')),
     path('productos/', include('productos.urls')),
     
-    # 💥 RUTA NUEVA/MODIFICADA: Apunta a avisos.urls
     path('publicaciones/', include('avisos.urls')), 
     
-    # Rutas de autenticación (login, registro)
     path('auth/', include('usuarios.urls')), 
     
     # Rutas principales (core)

@@ -76,10 +76,45 @@
     <!-- Sección de Anuncios -->
     <section id="Anuncios" class="Anuncios">
         <h1>Avisos</h1>
-        <div class="Anuncios-container">
-            <img src="{% static 'img/Anuncio1.png' %}" alt="">
-            <img src="{% static 'img/Anuncio2.png' %}" alt="">
-            <img src="{% static 'img/Anuncio3.png' %}" alt="">
+        
+        <div id="carouselAvisos" class="carousel slide" data-bs-ride="carousel" >
+            
+            <div class="carousel-inner">
+                {% if avisos %}
+                    {% for aviso in avisos %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            {% if aviso.imagen %}
+                                <img src="{{ aviso.imagen.url }}" class="d-block w-100" alt="{{ aviso.nombre }}" style="max-height: 500px; object-fit: contain;">
+                            {% else %}
+                                <div class="d-block w-100 bg-secondary text-white p-5 text-center" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                                    <div>
+                                        <h3>{{ aviso.nombre }}</h3>
+                                        <p>{{ aviso.descripcion }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+                                <h5>{{ aviso.nombre }}</h5>
+                                <p>{{ aviso.descripcion|truncatechars:50 }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        No hay avisos publicados por el momento.
+                    </div>
+                {% endif %}
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAvisos" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%;"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselAvisos" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%;"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
         </div>
     </section>
 
