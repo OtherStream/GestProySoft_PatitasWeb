@@ -1,18 +1,13 @@
-# avisos/views.py
-
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin # Para proteger las vistas
-
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Publicacion
 from .forms import PublicacionForm
 
-# Mixin de protección: Asegúrate de que el usuario esté logueado
-class StaffRequiredMixin(LoginRequiredMixin):
-    # Aquí puedes añadir lógica para verificar si el usuario es staff si es necesario
-    pass
-
-## VISTAS PARA EL CRUD DE PUBLICACIONES
+# Mixin para asegurar que solo el Staff (Admin) pueda acceder a estas vistas
+class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff
 
 # 1. LISTAR
 class PublicacionListView(StaffRequiredMixin, ListView):

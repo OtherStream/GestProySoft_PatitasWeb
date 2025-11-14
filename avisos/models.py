@@ -1,9 +1,6 @@
-# avisos/models.py
-
 from django.db import models
 from django.utils import timezone
 
-# Opciones para el campo de tipo de publicación (el combobox)
 TIPO_PUBLICACION = [
     ('AVISO', 'Aviso'),
     ('NOTICIA', 'Noticia'),
@@ -11,10 +8,8 @@ TIPO_PUBLICACION = [
 ]
 
 class Publicacion(models.Model):
-    # El "Nombre" o "Título" de la publicación
     nombre = models.CharField(max_length=200, verbose_name='Título/Nombre') 
     
-    # Campo para el combobox: Almacena el código (AVISO, NOTICIA, OTRO)
     tipo = models.CharField(
         max_length=10, 
         choices=TIPO_PUBLICACION, 
@@ -22,19 +17,18 @@ class Publicacion(models.Model):
         verbose_name='Tipo de Publicación'
     )
     
-    # La descripción larga
     descripcion = models.TextField(verbose_name='Descripción')
     
-    # Campo de imagen (se almacena en MEDIA_ROOT/publicaciones/)
     imagen = models.ImageField(upload_to='publicaciones', null=True, blank=True, verbose_name='Imagen')
     
-    # Fecha de creación (se establece automáticamente al crear la publicación)
     fecha_creacion = models.DateTimeField(default=timezone.now, verbose_name='Fecha de Publicación')
+
+    fecha_termino = models.DateTimeField(null=True, blank=True, verbose_name='Fecha de Término')
 
     class Meta:
         verbose_name = 'Publicación'
         verbose_name_plural = 'Publicaciones (Avisos/Servicios)'
-        ordering = ['-fecha_creacion'] # Ordenar por la más reciente primero
+        ordering = ['-fecha_creacion'] 
 
     def __str__(self):
         return self.nombre

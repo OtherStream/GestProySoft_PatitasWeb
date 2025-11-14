@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 
 <body>
@@ -73,48 +74,42 @@
         </div>
     </section>
 
-    <!-- Sección de Anuncios -->
     <section id="Anuncios" class="Anuncios">
-        <h1>Avisos</h1>
+        <h1>Avisos Importantes</h1>
         
-        <div id="carouselAvisos" class="carousel slide" data-bs-ride="carousel" >
-            
-            <div class="carousel-inner">
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
                 {% if avisos %}
                     {% for aviso in avisos %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            {% if aviso.imagen %}
-                                <img src="{{ aviso.imagen.url }}" class="d-block w-100" alt="{{ aviso.nombre }}" style="max-height: 500px; object-fit: contain;">
-                            {% else %}
-                                <div class="d-block w-100 bg-secondary text-white p-5 text-center" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
-                                    <div>
-                                        <h3>{{ aviso.nombre }}</h3>
-                                        <p>{{ aviso.descripcion }}</p>
+                        <div class="swiper-slide">
+                            <div class="card h-100 border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+                                {% if aviso.imagen %}
+                                    <div style="height: 250px; overflow: hidden;">
+                                        <img src="{{ aviso.imagen.url }}" alt="{{ aviso.nombre }}" 
+                                             style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
+                                {% else %}
+                                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" 
+                                         style="height: 250px;">
+                                        <i class="fa-solid fa-bullhorn fa-3x"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="card-body bg-white text-dark text-start">
+                                    <h5 class="card-title fw-bold text-primary">{{ aviso.nombre }}</h5>
+                                    <p class="card-text small text-muted">{{ aviso.descripcion|truncatechars:80 }}</p>
+                                    <p class="card-text"><small class="text-muted">{{ aviso.fecha_creacion|date:"d M Y" }}</small></p>
                                 </div>
-                            {% endif %}
-                            
-                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
-                                <h5>{{ aviso.nombre }}</h5>
-                                <p>{{ aviso.descripcion|truncatechars:50 }}</p>
                             </div>
                         </div>
                     {% endfor %}
                 {% else %}
-                    <div class="alert alert-info text-center">
-                        No hay avisos publicados por el momento.
+                    <div class="swiper-slide">
+                        <div class="alert alert-info">No hay avisos por el momento.</div>
                     </div>
                 {% endif %}
             </div>
-
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAvisos" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%;"></span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselAvisos" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%;"></span>
-                <span class="visually-hidden">Siguiente</span>
-            </button>
+            <div class="swiper-pagination"></div>
         </div>
     </section>
 
@@ -200,5 +195,32 @@
 
     {% include "core/footer.html" %}
 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,      // En celular se ve 1
+            spaceBetween: 30,      // Espacio entre tarjetas
+            loop: true,            // Gira infinitamente
+            autoplay: {
+                delay: 3000,       // Se mueve cada 3 segundos
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 1, // Celulares grandes
+                },
+                768: {
+                    slidesPerView: 2, // Tablets (se ven 2)
+                },
+                1024: {
+                    slidesPerView: 3, // PC (se ven 3, ¡lo que pediste!)
+                },
+            },
+        });
+    </script>
 </body>
 </html>
